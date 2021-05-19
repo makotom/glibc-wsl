@@ -1,0 +1,22 @@
+diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
+index 76516184b49..40025d570a9 100644
+--- a/trunk/PKGBUILD
++++ b/trunk/PKGBUILD
+@@ -86,6 +86,8 @@ build() {
+ 
+   # remove fortify for building libraries
+   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
++  export CFLAGS=${CFLAGS/-D_FORTIFY_SOURCE=2,/}
++  export CXXFLAGS=${CXXFLAGS/-D_FORTIFY_SOURCE=2,/}
+ 
+   #
+   CFLAGS=${CFLAGS/-fno-plt/}
+@@ -122,6 +124,8 @@ build() {
+ 
+   # remove fortify for building libraries
+   CPPFLAGS=${CPPFLAGS/-D_FORTIFY_SOURCE=2/}
++  export CFLAGS=${CFLAGS/-D_FORTIFY_SOURCE=2,/}
++  export CXXFLAGS=${CXXFLAGS/-D_FORTIFY_SOURCE=2,/}
+   CFLAGS=${CFLAGS/-fno-plt/}
+   CXXFLAGS=${CXXFLAGS/-fno-plt/}
+ 

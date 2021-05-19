@@ -1,0 +1,34 @@
+diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
+index 76516184b49..080e43b50fe 100644
+--- a/trunk/PKGBUILD
++++ b/trunk/PKGBUILD
+@@ -24,7 +24,8 @@ source=(https://ftp.gnu.org/gnu/glibc/glibc-$pkgver.tar.xz{,.sig}
+         bz27343.patch
+         0001-nptl_db-Support-different-libpthread-ld.so-load-orde.patch
+         0002-nptl-Check-for-compatible-GDB-in-nptl-tst-pthread-gd.patch
+-        0003-nptl-Do-not-build-nptl-tst-pthread-gdb-attach-as-PIE.patch)
++        0003-nptl-Do-not-build-nptl-tst-pthread-gdb-attach-as-PIE.patch
++        force-uname.patch)
+ validpgpkeys=(7273542B39962DF7B299931416792B4EA25340F8 # Carlos O'Donell
+               BC7C7372637EC10C57D7AA6579C43DFBF1CF2187) # Siddhesh Poyarekar
+ md5sums=('390bbd889c7e8e8a7041564cb6b27cca'
+@@ -37,7 +38,8 @@ md5sums=('390bbd889c7e8e8a7041564cb6b27cca'
+          'cfe57018d06bf748b8ca1779980fef33'
+          '78f041fc66fee4ee372f13b00a99ff72'
+          '9e418efa189c20053e887398df2253cf'
+-         '7a09f1693613897add1791e7aead19c9')
++         '7a09f1693613897add1791e7aead19c9'
++         '0f99f2c9989dc1ae3fdf89e57c870f28')
+ 
+ prepare() {
+   mkdir -p glibc-build lib32-glibc-build
+@@ -56,6 +58,9 @@ prepare() {
+ 
+   # nptl: Do not build nptl/tst-pthread-gdb-attach as PIE
+   patch -p1 -i "$srcdir"/0003-nptl-Do-not-build-nptl-tst-pthread-gdb-attach-as-PIE.patch
++
++  # Use uname, instead of DSO, to check kernel version
++  patch -p1 -i "$srcdir"/force-uname.patch
+ }
+ 
+ build() {
