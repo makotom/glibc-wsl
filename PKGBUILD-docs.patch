@@ -1,22 +1,24 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index 76516184b49..d991ead6ff3 100644
+index 76516184b49..0d943516109 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
-@@ -209,6 +209,9 @@ package_glibc() {
+@@ -209,6 +209,10 @@ package_glibc() {
  
    # Provided by libxcrypt; keep the old shared library for backwards compatibility
    rm -f "$pkgdir"/usr/include/crypt.h "$pkgdir"/usr/lib/libcrypt.{a,so}
 +
 +  # Make copies of documentations
-+  find "$srcdir/glibc/" -maxdepth 1 -type f | grep '/[A-Z.]\{1,\}$' | xargs install -Dm644 -t "$pkgdir/usr/share/docs/glibc"
++  find "$srcdir/glibc/" -maxdepth 1 -type f | grep '/[A-Z.]\{1,\}$' | xargs install -Dm644 -t "$pkgdir/usr/share/doc/glibc"
++  install -Dm644 -t "$pkgdir/usr/share/licenses/glibc" "$srcdir/glibc/COPYING" "$srcdir/glibc/COPYING.LIB" "$srcdir/glibc/LICENSES"
  }
  
  package_lib32-glibc() {
-@@ -246,4 +249,7 @@ package_lib32-glibc() {
+@@ -246,4 +250,8 @@ package_lib32-glibc() {
  
    # Provided by lib32-libxcrypt; keep the old shared library for backwards compatibility
    rm -f "$pkgdir"/usr/lib32/libcrypt.{a,so}
 +
 +  # Make copies of documentations
-+  find "$srcdir/glibc/" -maxdepth 1 -type f | grep '/[A-Z.]\{1,\}$' | xargs install -Dm644 -t "$pkgdir/usr/share/docs/lib32-glibc"
++  find "$srcdir/glibc/" -maxdepth 1 -type f | grep '/[A-Z.]\{1,\}$' | xargs install -Dm644 -t "$pkgdir/usr/share/doc/lib32-glibc"
++  install -Dm644 -t "$pkgdir/usr/share/licenses/lib32-glibc" "$srcdir/glibc/COPYING" "$srcdir/glibc/COPYING.LIB" "$srcdir/glibc/LICENSES"
  }
