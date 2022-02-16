@@ -3,7 +3,7 @@ version: 2.1
 executors:
   default-machine:
     machine:
-      image: ubuntu-2004:202104-01
+      image: ubuntu-2004:202201-02
 
 jobs:
   build:
@@ -23,28 +23,25 @@ jobs:
             svn update glibc
       - run:
           name: Patch PKGBUILD
+          working_directory: packages/glibc/repos/core-x86_64
           command: |
-            cd packages/glibc/repos/core-x86_64
             patch -p2 -i ../../../../PKGBUILD-docs.patch
-            patch -p2 -i ../../../../PKGBUILD-CFLAGS.patch
+            patch -p2 -i ../../../../PKGBUILD-skip-test.patch
             patch -p2 -i ../../../../PKGBUILD-force-uname.patch
             cp ../../../../force-uname.patch ./
       - run:
           name: makepkg
+          working_directory: packages/glibc/repos/core-x86_64
           command: |
-            docker run --rm -v $(pwd)/packages/glibc/repos/core-x86_64:/source -e PACKAGER -e GPG_SECRET_KEY -e GPG_PASSPHRASE archlinux bash -euo pipefail -c \
+            docker run --rm --privileged -v "$(pwd):/source" -e PACKAGER -e GPG_SECRET_KEY -e GPG_PASSPHRASE archlinux bash -euo pipefail -c \
             '''
             pacman -Syu --noconfirm base-devel gnupg git gd lib32-gcc-libs python
             chmod g+w,o+w /source
             useradd -m user
-            su -l -c "base64 -d | gpg --batch --import" user \<< EOD
-            $GPG_SECRET_KEY
-            EOD
-            su -l -c "echo allow-preset-passphrase > ~/.gnupg/gpg-agent.conf && gpg-connect-agent reloadagent /bye" user
-            su -l -c "/usr/lib/gnupg/gpg-preset-passphrase --preset \$(gpg --list-secret-keys --with-colons | awk -F: \"{ if (\\\$1 == \\\"grp\\\") { print \\\$(NF-1) } }\" | tail -n 1)" user \<< EOD
-            $GPG_PASSPHRASE
-            EOD
-            su -l -c "gpg --recv-keys 16792B4EA25340F8" user
+            printenv GPG_SECRET_KEY | su -l -c "base64 -d | gpg --batch --import" user
+            su -l -c "echo allow-preset-passphrase >> ~/.gnupg/gpg-agent.conf && gpg-connect-agent reloadagent /bye" user
+            printenv GPG_PASSPHRASE | su -l -c "/usr/lib/gnupg/gpg-preset-passphrase --preset \$(gpg --list-secret-keys --with-colons | awk -F: \"{ if (\\\$1 == \\\"grp\\\") { print \\\$(NF-1) } }\" | tail -n 1)" user
+            su -l -c "gpg --recv-keys 2E6F2933950726A85333D84EE28A22F9AF2FEC65 16792B4EA25340F8" user
             su -l -c "cd /source && PACKAGER=\"$PACKAGER\" makepkg --sign" user
             '''
       - run:
@@ -56,9 +53,10 @@ jobs:
           name: Compute checksums
           working_directory: dist
           command: |
-            md5sum *.pkg.tar.* > md5sums.txt
-            sha1sum *.pkg.tar.* > sha1sums.txt
-            sha512sum *.pkg.tar.* > sha512sums.txt
+            md5sum -- *.pkg.tar.* | tee md5sums.txt
+            sha1sum -- *.pkg.tar.* | tee sha1sums.txt
+            sha512sum -- *.pkg.tar.* | tee sha512sums.txt
+            b2sum -- *.pkg.tar.* | tee b2sums.txt
       - store_artifacts:
           path: dist
       - persist_to_workspace:
@@ -83,10 +81,12 @@ jobs:
           command: |
             docker run --rm -v $(pwd)/dist:/root/dist archlinux bash -euo pipefail -c \
             '''
-            export GPG_KEY_ID=$(pacman -Qip /root/dist/*.pkg.tar.zst | grep Signatures | grep -o "[0-9A-Z]\{40\}" | sort -u)
+            GPG_KEY_ID=$(pacman -Qip /root/dist/*.pkg.tar.zst | grep Signatures | grep -o "[0-9A-Z]\{40\}" | sort -u)
+            export GPG_KEY_ID
+
             pacman-key --init
-            pacman-key -r $GPG_KEY_ID
-            pacman-key --lsign-key $GPG_KEY_ID
+            pacman-key -r "${GPG_KEY_ID}"
+            pacman-key --lsign-key "${GPG_KEY_ID}"
             pacman -Sy
             pacman -U --noconfirm /root/dist/*.pkg.tar.zst
             echo
@@ -100,12 +100,12 @@ jobs:
 
   release:
     docker:
-      - image: debian:buster-slim
+      - image: ubuntu:rolling
     steps:
       - run:
           name: Install dependencies
           command: |
-            apt update 
+            apt update
             apt install -y curl git zstd
 
             tmpPath=$(mktemp)
@@ -125,7 +125,7 @@ jobs:
       - run:
           name: Create a release
           command: |
-            gh release create -R ${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME} -t "${RELEASE_NAME}" -n "" "${RELEASE_NAME}" dist/*
+            gh release create -R "${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}" -t "${RELEASE_NAME}" -n "" "${RELEASE_NAME}" dist/*
 
 workflows:
   workflow:
