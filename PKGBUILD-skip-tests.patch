@@ -1,13 +1,17 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index d5bfb8d..d52c692 100644
+index d5bfb8d..e0772ee 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
-@@ -153,6 +153,9 @@ check() {
+@@ -153,6 +153,13 @@ check() {
    skip_test tst-adjtime      time/Makefile
    skip_test tst-clock2       time/Makefile
  
 +  # The follwoing test fails presumably due to restrictions of Docker
 +  skip_test tst-nss-files-hosts-long nss/Makefile
++
++  # The following tests are flaky
++  skip_test tst-affinity-static sysdeps/unix/sysv/linux/Makefile
++  skip_test tst-affinity        sysdeps/unix/sysv/linux/Makefile
 +
    make -O check
  }
