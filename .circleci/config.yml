@@ -11,24 +11,28 @@ jobs:
     steps:
       - checkout
       - run:
-          name: Install Subversion
-          command: |
-            sudo apt update
-            sudo apt install -y subversion
-      - run:
           name: Clone glibc
           command: |
+            docker run --rm -v "$(pwd):/source" archlinux bash -euo pipefail -c \
+            '''
+            pacman -Syu --noconfirm subversion db
+            cd /source
             svn checkout --depth=empty svn://svn.archlinux.org/packages
             cd packages
             svn update glibc
+            '''
       - run:
           name: Patch PKGBUILD
-          working_directory: packages/glibc/repos/core-x86_64
           command: |
+            docker run --rm -v "$(pwd):/source" archlinux bash -euo pipefail -c \
+            '''
+            pacman -Syu --noconfirm patch
+            cd /source/packages/glibc/repos/core-x86_64
             patch -p2 -i ../../../../PKGBUILD-docs.patch
             patch -p2 -i ../../../../PKGBUILD-skip-tests.patch
             patch -p2 -i ../../../../PKGBUILD-force-uname.patch
             cp ../../../../force-uname.patch ./
+            '''
       - run:
           name: makepkg
           working_directory: packages/glibc/repos/core-x86_64
