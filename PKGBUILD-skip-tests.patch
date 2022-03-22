@@ -1,8 +1,8 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index d5bfb8d..e0772ee 100644
+index 4f77649..c1b8627 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
-@@ -153,6 +153,13 @@ check() {
+@@ -157,6 +157,13 @@ check() {
    skip_test tst-adjtime      time/Makefile
    skip_test tst-clock2       time/Makefile
  

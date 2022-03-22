@@ -1,11 +1,11 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index 76516184b49..0d943516109 100644
+index 4f77649..a6fb1c7 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
-@@ -209,6 +209,10 @@ package_glibc() {
- 
-   # Provided by libxcrypt; keep the old shared library for backwards compatibility
-   rm -f "$pkgdir"/usr/include/crypt.h "$pkgdir"/usr/lib/libcrypt.{a,so}
+@@ -210,6 +210,10 @@ package_glibc() {
+   # libraries too. Useful for gdb's catch command.
+   install -Dm644 "$srcdir/sdt.h" "$pkgdir/usr/include/sys/sdt.h"
+   install -Dm644 "$srcdir/sdt-config.h" "$pkgdir/usr/include/sys/sdt-config.h"
 +
 +  # Make copies of documentations
 +  find "$srcdir/glibc/" -maxdepth 1 -type f | grep '/[A-Z.]\{1,\}$' | xargs install -Dm644 -t "$pkgdir/usr/share/doc/glibc"
@@ -13,10 +13,10 @@ index 76516184b49..0d943516109 100644
  }
  
  package_lib32-glibc() {
-@@ -246,4 +250,8 @@ package_lib32-glibc() {
- 
-   # Provided by lib32-libxcrypt; keep the old shared library for backwards compatibility
-   rm -f "$pkgdir"/usr/lib32/libcrypt.{a,so}
+@@ -244,4 +248,8 @@ package_lib32-glibc() {
+       -not -name 'libthread_db.so*' \
+       -name '*.so*' -type f -exec strip $STRIP_SHARED {} + 2> /dev/null || true
+   fi
 +
 +  # Make copies of documentations
 +  find "$srcdir/glibc/" -maxdepth 1 -type f | grep '/[A-Z.]\{1,\}$' | xargs install -Dm644 -t "$pkgdir/usr/share/doc/lib32-glibc"
