@@ -123,7 +123,7 @@ jobs:
             mkdir bench
             cd bench
 
-            tar -xf ../dist/glibc-*.tar.zst
+            tar -xf "$(ls ../dist/glibc-*.tar.zst | head -n 1)"
 
             echo "export RELEASE_NAME=\"$(awk '{ if ($1 == "pkgver") { print $NF } }' .PKGINFO)@${CIRCLE_BUILD_NUM}-${CIRCLE_SHA1:0:7}\"" | tee -a $BASH_ENV
       - run:
