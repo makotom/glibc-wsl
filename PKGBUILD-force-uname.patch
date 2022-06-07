@@ -1,5 +1,5 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index aa64c04..7105c01 100644
+index c684f2f..87a2ad5 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
 @@ -22,6 +22,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=${_commit}

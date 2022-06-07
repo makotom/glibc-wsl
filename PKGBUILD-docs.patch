@@ -1,8 +1,8 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index aa64c04..973dcc4 100644
+index c684f2f..75a780a 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
-@@ -186,6 +186,10 @@ package_glibc() {
+@@ -194,6 +194,10 @@ package_glibc() {
    # libraries too. Useful for gdb's catch command.
    install -Dm644 "$srcdir/sdt.h" "$pkgdir/usr/include/sys/sdt.h"
    install -Dm644 "$srcdir/sdt-config.h" "$pkgdir/usr/include/sys/sdt-config.h"
@@ -13,7 +13,7 @@ index aa64c04..973dcc4 100644
  }
  
  package_lib32-glibc() {
-@@ -210,4 +214,8 @@ package_lib32-glibc() {
+@@ -218,4 +222,8 @@ package_lib32-glibc() {
  
    # Symlink /usr/lib32/locale to /usr/lib/locale
    ln -s ../lib/locale "$pkgdir/usr/lib32/locale"
