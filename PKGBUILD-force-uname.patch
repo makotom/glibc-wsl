@@ -1,5 +1,5 @@
 diff --git a/trunk/PKGBUILD b/trunk/PKGBUILD
-index c684f2f..7299943 100644
+index c684f2f..bb9d534 100644
 --- a/trunk/PKGBUILD
 +++ b/trunk/PKGBUILD
 @@ -22,6 +22,7 @@ source=(git+https://sourceware.org/git/glibc.git#commit=${_commit}
@@ -16,7 +16,7 @@ index c684f2f..7299943 100644
          '214e995e84b342fe7b2a7704ce011b7c7fc74c2971f98eeb3b4e677b99c860addc0a7d91b8dc0f0b8be7537782ee331999e02ba48f4ccc1c331b60f27d715678'
 -        'edef5f724f68ea95c6b0127bd13a10245f548afc381b2d0a6d1d06ee9f87b7dd89c6becd35d5ae722bf838594eb870a747f67f07f46e7d63f8c8d1a43cce4a52')
 +        'edef5f724f68ea95c6b0127bd13a10245f548afc381b2d0a6d1d06ee9f87b7dd89c6becd35d5ae722bf838594eb870a747f67f07f46e7d63f8c8d1a43cce4a52'
-+        '94b5fd2d58880c0828a6c13b18701e7d16ab4de26b0f62ea9f1cb4c6058b1579bf5e985bc68e9fee9b378bcfdd7b4c4e62e9e98ea3296303e775b41345a6844e'
++        'd73198be457479addd3e13c0795e887d94482584e3f1d18459037a8cdb21390b19c5262d3cf2193f84d7780b0ec0dc06c454304da35178d3b0dbcb7141564349'
 +)
  
  prepare() {
