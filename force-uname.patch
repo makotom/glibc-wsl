@@ -1,5 +1,5 @@
 diff --git a/sysdeps/unix/sysv/linux/dl-sysdep.c b/sysdeps/unix/sysv/linux/dl-sysdep.c
-index c90f109b11..4f3935ed9b 100644
+index c90f109b11..1ace563d31 100644
 --- a/sysdeps/unix/sysv/linux/dl-sysdep.c
 +++ b/sysdeps/unix/sysv/linux/dl-sysdep.c
 @@ -256,7 +256,7 @@ int
@@ -7,7 +7,7 @@ index c90f109b11..4f3935ed9b 100644
  _dl_discover_osversion (void)
  {
 -#ifdef SHARED
-+#ifdef SHARED && 0
++#if defined SHARED && 0
    if (GLRO(dl_sysinfo_map) != NULL)
      {
        /* If the kernel-supplied DSO contains a note indicating the kernel's
